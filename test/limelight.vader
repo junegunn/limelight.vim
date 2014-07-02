@@ -1,5 +1,15 @@
 Execute (Setup):
+  Save g:colors_name, &background
   colo seoul256
+
+  function! s:assert_on()
+    Assert exists('#limelight'), 'limelight should be on'
+  endfunction
+  function! s:assert_off()
+    Assert !exists('#limelight'), 'limelight should be off'
+  endfunction
+  command! AssertOn  call s:assert_on()
+  command! AssertOff call s:assert_off()
 
 Before:
   unlet! g:limelight_default_coefficient
@@ -7,101 +17,111 @@ Before:
 
 Execute (Invalid argument type):
   Limelight 'hello'
-  Assert !exists('#limelight')
+  AssertOff
 
   Limelight {}
-  Assert !exists('#limelight')
+  AssertOff
 
   Limelight []
-  Assert !exists('#limelight')
+  AssertOff
 
 Execute (Invalid argument range):
   Limelight 1.2
-  Assert !exists('#limelight')
+  AssertOff
 
   Limelight 2
-  Assert !exists('#limelight')
+  AssertOff
 
   Limelight -0.2
-  Assert !exists('#limelight')
+  AssertOff
 
   Limelight -1
-  Assert !exists('#limelight')
+  AssertOff
 
 Execute (Limelight / Limelight!):
   Limelight
-  Assert exists('#limelight')
+  AssertOn
 
   Limelight
-  Assert exists('#limelight')
+  AssertOn
 
   Limelight!
-  Assert !exists('#limelight')
+  AssertOff
 
   Limelight!
-  Assert !exists('#limelight')
+  AssertOff
 
   Limelight 0.5
-  Assert exists('#limelight')
+  AssertOn
 
   Limelight!
-  Assert !exists('#limelight')
+  AssertOff
 
 Execute (Limelight!!):
   Limelight!!
-  Assert exists('#limelight')
+  AssertOn
 
   Limelight!!
-  Assert !exists('#limelight')
+  AssertOff
 
   Limelight!! 2.0
-  Assert !exists('#limelight')
+  AssertOff
 
   Limelight!! 0.9
-  Assert exists('#limelight')
+  AssertOn
 
   Limelight!! 0.9
-  Assert !exists('#limelight')
+  AssertOff
 
 Execute (g:limelight_default_coefficient):
   let g:limelight_default_coefficient = 2.0
   Limelight
-  Assert !exists('#limelight')
+  AssertOff
 
   let g:limelight_default_coefficient = -1.0
   Limelight
-  Assert !exists('#limelight')
+  AssertOff
 
 Execute (Unsupported terminal):
   colo default
   let &t_Co = 16
 
   Limelight
-  Assert !exists('#limelight')
+  AssertOff
 
 Execute (Unsupported. but g:limelight_conceal_???fg defined):
   if has('gui_running')
     colo default
     let g:limelight_conceal_guifg = '#cccccc'
     Limelight
-    Assert exists('#limelight')
+    AssertOn
     Limelight!
-    Assert !exists('#limelight')
+    AssertOff
   else
     colo default
     let &t_Co = 256
     let g:limelight_conceal_ctermfg = 240
-
     Limelight
-    Assert exists('#limelight')
+    AssertOn
     Limelight!
-    Assert !exists('#limelight')
+    AssertOff
 
     let g:limelight_conceal_ctermfg = 'red'
-
+    Limelight
+    AssertOn
+    Limelight!
+    AssertOff
   endif
 
   " However, you're still not allowed to pass argument to Limelight command
   Limelight 0.5
-  Assert !exists('#limelight')
+  AssertOff
 
+Execute (TODO: Color interpolation):
+  Assert 0, 'TODO'
+
+Execute (Cleanup):
+  delc AssertOn
+  delc AssertOff
+  Restore
+  execute 'colo '.g:colors_name
