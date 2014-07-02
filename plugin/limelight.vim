@@ -72,8 +72,16 @@ function! s:hex2rgb(str)
   return [eval('0x'.str[0:1]), eval('0x'.str[2:3]), eval('0x'.str[4:5])]
 endfunction
 
+let s:gray_converter = {
+\ 0:   231,
+\ 7:   254,
+\ 15:  256,
+\ 16:  231,
+\ 231: 256
+\ }
+
 function! s:gray_contiguous(col)
-  let val = (a:col == 15 || a:col == 231) ? 256 : (a:col == 0 ? 231 : a:col)
+  let val = get(s:gray_converter, a:col, a:col)
   if val < 231 || val > 256
     throw s:unsupported
   endif
