@@ -1,6 +1,8 @@
 limelight.vim ![travis-ci](https://travis-ci.org/junegunn/limelight.vim.svg?branch=master)
 =============
 
+Hyperfocus-writing in Vim.
+
 ![](https://cloud.githubusercontent.com/assets/700826/3441009/00383ac0-00ff-11e4-81f1-5873e4c3e4e9.gif)
 
 Best served with [Goyo.vim](https://github.com/junegunn/goyo.vim).
