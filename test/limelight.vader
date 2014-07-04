@@ -15,16 +15,6 @@ Before:
   unlet! g:limelight_default_coefficient
        \ g:limelight_conceal_guifg g:limelight_conceal_ctermfg
 
-Execute (Invalid argument type):
-  Limelight 'hello'
-  AssertOff
-
-  Limelight {}
-  AssertOff
-
-  Limelight []
-  AssertOff
-
 Execute (Invalid argument range):
   Limelight 1.2
   AssertOff

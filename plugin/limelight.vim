@@ -44,21 +44,73 @@ function! s:limelight()
   endif
 
   let curr = [line('.'), line('$')]
-  if curr ==# w:limelight_prev[0 : 1]
+  if curr ==# w:limelight_prev[0 : 1] && empty(s:params)
     return
   endif
 
-  let paragraph = [searchpos('^$', 'bnW')[0], searchpos('^$', 'nW')[0]]
-  if paragraph ==# w:limelight_prev[2 : 3]
+  let range = s:find_range()
+  if range ==# w:limelight_prev[2 : 3]
     return
   endif
 
   call s:clear_hl()
-  call add(w:limelight_match_ids, matchadd('LimelightDim', '\%<'.paragraph[0].'l'))
-  if paragraph[1] > 0
-    call add(w:limelight_match_ids, matchadd('LimelightDim', '\%>'.paragraph[1].'l'))
+  if range[0] > 0
+    call add(w:limelight_match_ids, matchadd('LimelightDim', '\%<'.range[0].'l'))
   endif
-  let w:limelight_prev = extend(curr, paragraph)
+  if range[1] > 0
+    call add(w:limelight_match_ids, matchadd('LimelightDim', '\%>'.range[1].'l'))
+  endif
+  let w:limelight_prev = extend(curr, range)
+endfunction
+
+function! s:find_range()
+  if empty(s:params)
+    return s:find_paragraph()
+  else
+    return s:find_enclosing_block()
+  endif
+endfunction
+
+function! s:find_paragraph()
+  return [searchpos('^$', 'bnW')[0], searchpos('^$', 'nW')[0]]
+endfunction
+
+function! s:find_begin(pair)
+  let filtered =
+  \ filter(
+  \   map(items({ 'bcnW': 'nW', 'bnW': 'cnW' }),
+  \       '[searchpair(a:pair[0], "", a:pair[1], v:val[0]), v:val[1], a:pair]'),
+  \   'v:val[0] > 0')
+  if empty(filtered)
+    return [0, '', []]
+  else
+    return s:max_by_1st(filtered)
+  endif
+endfunction
+
+function! s:find_enclosing_block()
+  let begins =
+      \ filter(map(copy(s:params), 's:find_begin(v:val)'), 'v:val[0] > 0')
+  if empty(begins)
+    return [0, 0]
+  else
+    let [begin, flag, pair] = s:max_by_1st(begins)
+    let end = searchpair(pair[0], '', pair[1], flag)
+    if end == 0
+      return [0, 0]
+    endif
+    return [begin, end]
+  endif
+endfunction
+
+function! s:max_by_1st(list)
+  let max = a:list[0]
+  for item in a:list
+    if item[0] > max[0]
+      let max = item
+    endif
+  endfor
+  return max
 endfunction
 
 function! s:clear_hl()
@@ -149,26 +201,9 @@ function! s:error(msg)
   echohl None
 endfunction
 
-function! s:parse_coeff(coeff)
-  let t = type(a:coeff)
-  if t == 1
-    if a:coeff =~ '^ *[0-9.]\+ *$'
-      let c = str2float(a:coeff)
-    else
-      throw s:invalid_coefficient
-    endif
-  elseif index([0, 5], t) >= 0
-    let c = t
-  else
-    throw s:invalid_coefficient
-  endif
-  return c
-endfunction
-
-function! s:on(...)
+function! s:on(coeff, params)
   try
-    let s:limelight_coeff = a:0 > 0 ? s:parse_coeff(a:1) : -1
-    call s:dim(s:limelight_coeff)
+    call s:dim(a:coeff)
   catch
     return s:error(v:exception)
   endtry
@@ -191,6 +226,8 @@ function! s:on(...)
     autocmd WinEnter * call s:cleanup()
   augroup END
 
+  let s:params = a:params
+
   doautocmd CursorMoved
 endfunction
 
@@ -209,21 +246,64 @@ function! s:is_on()
   return exists('#limelight')
 endfunction
 
-function! s:do(bang, ...)
-  if a:bang
-    if a:0 > 0 && a:1 =~ '^!' && !s:is_on()
-      if len(a:1) > 1
-        call s:on(a:1[1:-1])
+function! s:transform_params(params)
+  let ret = []
+  for param in a:params
+    if len(param) == 2
+      call add(ret, [param[0], param[1]])
+    elseif param =~ '/'
+      call add(ret, split(param, '/')[0:1])
+    else
+      throw 'Invalid pair: ' . param
+    endif
+  endfor
+  return ret
+endfunction
+
+function! s:parse_args(args)
+  if empty(a:args)
+    return [0, -1, []]
+  else
+    let toggle = a:args[0][0] == '!'
+    let args = copy(a:args)
+    let args[0] = substitute(a:args[0], '^!', '', '')
+    let args = filter(args, 'len(v:val) > 0')
+
+    let params = []
+    let coeff = -1
+    for arg in args
+      if arg =~ '^[0-9.-]\+$'
+        let coeff = str2float(arg)
+        if coeff < 0 || coeff > 1
+          throw s:invalid_coefficient
+        endif
       else
-        call s:on()
+        call add(params, arg)
+      endif
+    endfor
+    return [toggle, coeff, s:transform_params(params)]
+  endif
+endfunction
+
+function! s:do(bang, ...)
+  try
+    let [toggle, coeff, params] = s:parse_args(a:000)
+  catch
+    return s:error(v:exception)
+  endtry
+
+  if a:bang
+    if toggle
+      if s:is_on()
+        call s:off()
+      else
+        call s:on(coeff, params)
       endif
     else
       call s:off()
     endif
-  elseif a:0 > 0
-    call s:on(a:1)
   else
-    call s:on()
+    call s:on(coeff, params)
   endif
 endfunction
 
@@ -233,7 +313,7 @@ function! s:cleanup()
   end
 endfunction
 
-command! -nargs=? -bar -bang Limelight call s:do('<bang>' == '!', <f-args>)
+command! -nargs=* -bar -bang Limelight call s:do('<bang>' == '!', <f-args>)
 
 let &cpo = s:cpo_save
 unlet s:cpo_save

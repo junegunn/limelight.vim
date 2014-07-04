@@ -11,11 +11,11 @@ Works on 256-color terminal or on GVim.
 Usage
 -----
 
-- `Limelight [0.0 ~ 1.0]`
+- `Limelight [{}|()] [0.0 ~ 1.0]`
     - Turn Limelight on
 - `Limelight!`
     - Turn Limelight off
-- `Limelight!! [0.0 ~ 1.0]`
+- `Limelight!! [{}|()] [0.0 ~ 1.0]`
     - Toggle Limelight
 
 ### Options
