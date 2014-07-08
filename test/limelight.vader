@@ -100,6 +100,11 @@ Execute (Unsupported. but g:limelight_conceal_???fg defined):
   else
     colo default
     let &t_Co = 256
+
+    " Cannot enable it without g:limelight_conceal_ctermfg
+    Limelight
+    AssertOff
+
     let g:limelight_conceal_ctermfg = 240
     Limelight
     AssertOn
@@ -114,8 +119,11 @@ Execute (Unsupported. but g:limelight_conceal_???fg defined):
   endif
 
   " However, you're still not allowed to pass argument to Limelight command
+  redir => msg
   Limelight 0.5
+  redir END
   AssertOff
+  Assert msg !~ 'g:limelight_conceal_', 'Invalid message: '.msg
 
 Execute (TODO: Color interpolation):
   Assert 0, 'TODO'
@@ -123,5 +131,6 @@ Execute (TODO: Color interpolation):
 Execute (Cleanup):
   delc AssertOn
   delc AssertOff
+  unlet! msg
   Restore
   execute 'colo '.g:colors_name
