@@ -82,7 +82,16 @@ let s:gray_converter = {
 
 function! s:gray_contiguous(col)
   let val = get(s:gray_converter, a:col, a:col)
-  if val < 231 || val > 256
+  if (val < 231 || val > 256)
+    if has('gui_running')
+      if exists('g:limelight_conceal_guifg')
+        return g:limelight_conceal_guifg
+      endif
+    else
+      if exists('g:limelight_conceal_ctermfg')
+        return g:limelight_conceal_ctermfg
+      endif
+    endif
     throw s:unsupported
   endif
   return val
