@@ -30,10 +30,17 @@ let s:cpo_save = &cpo
 set cpo&vim
 
 let s:default_coeff = 0.5
-let s:unsupported =
-  \ 'Unsupported color scheme. g:limelight_conceal_' .
-  \ (has('gui_running') ? 'gui' : 'cterm') . 'fg required.'
 let s:invalid_coefficient = 'Invalid coefficient. Expected: 0.0 ~ 1.0'
+
+function! s:unsupported()
+  let var = 'g:limelight_conceal_'.(has('gui_running') ? 'gui' : 'cterm').'fg'
+
+  if exists(var)
+    return 'Cannot calculate background color.'
+  else
+    return 'Unsupported color scheme. '.var.' fg required.'
+  endif
+endfunction
 
 function! s:limelight()
   if !exists('w:limelight_prev')
@@ -83,7 +90,7 @@ let s:gray_converter = {
 function! s:gray_contiguous(col)
   let val = get(s:gray_converter, a:col, a:col)
   if val < 231 || val > 256
-    throw s:unsupported
+    throw s:unsupported()
   endif
   return val
 endfunction
@@ -110,7 +117,7 @@ function! s:dim(coeff)
     if a:coeff < 0 && exists('g:limelight_conceal_guifg')
       let dim = g:limelight_conceal_guifg
     elseif empty(fg) || empty(bg)
-      throw s:unsupported
+      throw s:unsupported()
     else
       let coeff = s:coeff(a:coeff)
       let fg_rgb = s:hex2rgb(fg)
@@ -125,8 +132,8 @@ function! s:dim(coeff)
   elseif &t_Co == 256
     if a:coeff < 0 && exists('g:limelight_conceal_ctermfg')
       let dim = g:limelight_conceal_ctermfg
-    elseif fg < -1 || bg < -1
-      throw s:unsupported
+    elseif fg <= -1 || bg <= -1
+      throw s:unsupported()
     else
       let coeff = s:coeff(a:coeff)
       let fg = s:gray_contiguous(fg)
