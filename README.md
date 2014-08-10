@@ -41,15 +41,8 @@ Goyo.vim integration
 --------------------
 
 ```vim
-function! GoyoBefore()
-  Limelight
-endfunction
-
-function! GoyoAfter()
-  Limelight!
-endfunction
-
-let g:goyo_callbacks = [function('GoyoBefore'), function('GoyoAfter')]
+autocmd User GoyoEnter LimeLight
+autocmd User GoyoLeave LimeLight!
 ```
 
 Acknowledgement
