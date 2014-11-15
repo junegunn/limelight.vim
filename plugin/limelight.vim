@@ -128,7 +128,7 @@ function! s:dim(coeff)
             \ bg_rgb[2] * coeff + fg_rgb[2] * (1 - coeff)]
       let dim = '#'.join(map(dim_rgb, 'printf("%x", float2nr(v:val))'), '')
     endif
-    execute printf('hi LimelightDim guifg=%s', dim)
+    execute printf('hi LimelightDim guifg=%s guisp=bg', dim)
   elseif &t_Co == 256
     if a:coeff < 0 && exists('g:limelight_conceal_ctermfg')
       let dim = g:limelight_conceal_ctermfg
