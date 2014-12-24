@@ -38,7 +38,7 @@ function! s:unsupported()
   if exists(var)
     return 'Cannot calculate background color.'
   else
-    return 'Unsupported color scheme. '.var.' fg required.'
+    return 'Unsupported color scheme. '.var.' required.'
   endif
 endfunction
 
