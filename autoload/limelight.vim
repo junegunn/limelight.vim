@@ -42,6 +42,20 @@ function! s:unsupported()
   endif
 endfunction
 
+function! s:getpos()
+  let span = max([0, get(g:, 'limelight_paragraph_span', 0) - empty(getline('.'))])
+  let pos = getpos('.')
+  for _ in range(0, span)
+    let start = searchpos('^$', 'bW')[0]
+  endfor
+  call setpos('.', pos)
+  for _ in range(0, span)
+    let end = searchpos('^$', 'W')[0]
+  endfor
+  call setpos('.', pos)
+  return [start, end]
+endfunction
+
 function! s:limelight()
   if !exists('w:limelight_prev')
     let w:limelight_prev = [0, 0, 0, 0]
@@ -55,7 +69,7 @@ function! s:limelight()
     return
   endif
 
-  let paragraph = [searchpos('^$', 'bnW')[0], searchpos('^$', 'nW')[0]]
+  let paragraph = s:getpos()
   if paragraph ==# w:limelight_prev[2 : 3]
     return
   endif
