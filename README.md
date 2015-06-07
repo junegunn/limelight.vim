@@ -18,6 +18,8 @@ Usage
 - `Limelight!! [0.0 ~ 1.0]`
     - Toggle Limelight
 
+You can also invoke `:Limelight` for a visual range.
+
 ### Options
 
 For some color schemes, Limelight may not be able to calculate the color for

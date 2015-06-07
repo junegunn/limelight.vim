@@ -21,5 +21,5 @@
 " OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 " WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-command! -nargs=? -bar -bang Limelight call limelight#execute(<bang>0, <f-args>)
+command! -nargs=? -bar -bang -range Limelight <line1>,<line2>call limelight#execute(<bang>0, <count> > 0, <f-args>)
 

@@ -57,11 +57,11 @@ function! s:getpos()
 endfunction
 
 function! s:limelight()
+  if !empty(get(w:, 'limelight_range', []))
+    return
+  endif
   if !exists('w:limelight_prev')
     let w:limelight_prev = [0, 0, 0, 0]
-  endif
-  if !exists('w:limelight_match_ids')
-    let w:limelight_match_ids = []
   endif
 
   let curr = [line('.'), line('$')]
@@ -75,15 +75,20 @@ function! s:limelight()
   endif
 
   call s:clear_hl()
-  call add(w:limelight_match_ids, matchadd('LimelightDim', '\%<'.paragraph[0].'l'))
-  if paragraph[1] > 0
-    call add(w:limelight_match_ids, matchadd('LimelightDim', '\%>'.paragraph[1].'l'))
-  endif
+  call call('s:hl', paragraph)
   let w:limelight_prev = extend(curr, paragraph)
 endfunction
 
+function! s:hl(startline, endline)
+  let w:limelight_match_ids = get(w:, 'limelight_match_ids', [])
+  call add(w:limelight_match_ids, matchadd('LimelightDim', '\%<'.a:startline.'l'))
+  if a:endline > 0
+    call add(w:limelight_match_ids, matchadd('LimelightDim', '\%>'.a:endline.'l'))
+  endif
+endfunction
+
 function! s:clear_hl()
-  while !empty(w:limelight_match_ids)
+  while exists('w:limelight_match_ids') && !empty(w:limelight_match_ids)
     silent! call matchdelete(remove(w:limelight_match_ids, -1))
   endwhile
 endfunction
@@ -186,7 +191,7 @@ function! s:parse_coeff(coeff)
   return c
 endfunction
 
-function! s:on(...)
+function! s:on(range, ...)
   try
     let s:limelight_coeff = a:0 > 0 ? s:parse_coeff(a:1) : -1
     call s:dim(s:limelight_coeff)
@@ -194,12 +199,20 @@ function! s:on(...)
     return s:error(v:exception)
   endtry
 
+  let w:limelight_range = a:range
+  if !empty(a:range)
+    call s:clear_hl()
+    call call('s:hl', a:range)
+  endif
+
   augroup limelight
+    let was_on = exists('#limelight#CursorMoved')
     autocmd!
-    autocmd CursorMoved,CursorMovedI * call s:limelight()
+    if empty(a:range) || was_on
+      autocmd CursorMoved,CursorMovedI * call s:limelight()
+    endif
     autocmd ColorScheme * try
                        \|   call s:dim(s:limelight_coeff)
-                       \|   call s:limelight()
                        \| catch
                        \|   call s:off()
                        \|   throw v:exception
@@ -216,14 +229,12 @@ function! s:on(...)
 endfunction
 
 function! s:off()
-  if exists('w:limelight_match_ids')
-    call s:clear_hl()
-  endif
+  call s:clear_hl()
   augroup limelight
     autocmd!
   augroup END
   augroup! limelight
-  unlet! w:limelight_prev w:limelight_match_ids
+  unlet! w:limelight_prev w:limelight_match_ids w:limelight_range
 endfunction
 
 function! s:is_on()
@@ -231,26 +242,27 @@ function! s:is_on()
 endfunction
 
 function! s:cleanup()
-  if !s:is_on() && exists('w:limelight_match_ids')
+  if !s:is_on()
     call s:clear_hl()
   end
 endfunction
 
-function! limelight#execute(bang, ...)
+function! limelight#execute(bang, visual, ...) range
+  let range = a:visual ? [a:firstline, a:lastline] : []
   if a:bang
     if a:0 > 0 && a:1 =~ '^!' && !s:is_on()
       if len(a:1) > 1
-        call s:on(a:1[1:-1])
+        call s:on(range, a:1[1:-1])
       else
-        call s:on()
+        call s:on(range)
       endif
     else
       call s:off()
     endif
   elseif a:0 > 0
-    call s:on(a:1)
+    call s:on(range, a:1)
   else
-    call s:on()
+    call s:on(range)
   endif
 endfunction
 
