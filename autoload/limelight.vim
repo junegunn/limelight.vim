@@ -266,6 +266,10 @@ function! limelight#execute(bang, visual, ...) range
   endif
 endfunction
 
+function! limelight#operator(...)
+  '[,']call limelight#execute(0, 1)
+endfunction
+
 let &cpo = s:cpo_save
 unlet s:cpo_save
 

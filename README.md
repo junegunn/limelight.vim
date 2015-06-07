@@ -18,7 +18,15 @@ Usage
 - `Limelight!! [0.0 ~ 1.0]`
     - Toggle Limelight
 
-You can also invoke `:Limelight` for a visual range.
+### Limelight for a selected range
+
+You can invoke `:Limelight` for a visual range. There are also `<Plug>`
+mappings for normal and visual mode for the purpose.
+
+```vim
+nmap <Leader>l <Plug>(Limelight)
+xmap <Leader>l <Plug>(Limelight)
+```
 
 ### Options
 
