@@ -54,8 +54,8 @@ Goyo.vim integration
 --------------------
 
 ```vim
-autocmd User GoyoEnter Limelight
-autocmd User GoyoLeave Limelight!
+autocmd! User GoyoEnter Limelight
+autocmd! User GoyoLeave Limelight!
 ```
 
 Acknowledgement
