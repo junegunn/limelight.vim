@@ -43,17 +43,21 @@ function! s:unsupported()
 endfunction
 
 function! s:getpos()
-  let span = max([0, get(g:, 'limelight_paragraph_span', 0) - empty(getline('.'))])
+  let span = max([0, get(g:, 'limelight_paragraph_span', 0) - s:empty(getline('.'))])
   let pos = getpos('.')
   for _ in range(0, span)
-    let start = searchpos('^$', 'bW')[0]
+    let start = searchpos('^\s*$', 'bW')[0]
   endfor
   call setpos('.', pos)
   for _ in range(0, span)
-    let end = searchpos('^$', 'W')[0]
+    let end = searchpos('^\s*$', 'W')[0]
   endfor
   call setpos('.', pos)
   return [start, end]
+endfunction
+
+function! s:empty(line)
+  return (a:line =~# '^\s*$')
 endfunction
 
 function! s:limelight()
