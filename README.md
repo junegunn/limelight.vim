@@ -54,6 +54,10 @@ let g:limelight_paragraph_span = 1
 "   and each paragraph starts with indentation
 let g:limelight_bop = '^\s'
 let g:limelight_eop = '\ze\n^\s'
+
+" Highlighting priority (default: 10)
+"   Set it to -1 not to overrule hlsearch
+let g:limelight_priority = -1
 ```
 
 Goyo.vim integration

@@ -87,9 +87,10 @@ endfunction
 
 function! s:hl(startline, endline)
   let w:limelight_match_ids = get(w:, 'limelight_match_ids', [])
-  call add(w:limelight_match_ids, matchadd('LimelightDim', '\%<'.a:startline.'l'))
+  let priority = get(g:, 'limelight_priority', 10)
+  call add(w:limelight_match_ids, matchadd('LimelightDim', '\%<'.a:startline.'l', priority))
   if a:endline > 0
-    call add(w:limelight_match_ids, matchadd('LimelightDim', '\%>'.a:endline.'l'))
+    call add(w:limelight_match_ids, matchadd('LimelightDim', '\%>'.a:endline.'l', priority))
   endif
 endfunction
 
