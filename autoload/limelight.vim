@@ -32,11 +32,6 @@ set cpo&vim
 let s:default_coeff = str2float('0.5')
 let s:invalid_coefficient = 'Invalid coefficient. Expected: 0.0 ~ 1.0'
 
-function! s:nvim_unsupported()
-  let var = 'g:limelight_conceal_guifg'
-  return 'Neovim with true colors is not yet supported. Please set '.var
-endfunction
-
 function! s:unsupported()
   let var = 'g:limelight_conceal_'.(has('gui_running') ? 'gui' : 'cterm').'fg'
 
@@ -144,13 +139,11 @@ function! s:dim(coeff)
   let fg = synIDattr(synid, 'fg#')
   let bg = synIDattr(synid, 'bg#')
 
-  if has('gui_running')
+  if has('gui_running') || has('nvim') && $NVIM_TUI_ENABLE_TRUE_COLOR
     if a:coeff < 0 && exists('g:limelight_conceal_guifg')
       let dim = g:limelight_conceal_guifg
     elseif empty(fg) || empty(bg)
       throw s:unsupported()
-    elseif has('nvim')
-      throw s:nvim_unsupported()
     else
       let coeff = s:coeff(a:coeff)
       let fg_rgb = s:hex2rgb(fg)
