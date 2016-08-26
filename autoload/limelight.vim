@@ -32,8 +32,12 @@ set cpo&vim
 let s:default_coeff = str2float('0.5')
 let s:invalid_coefficient = 'Invalid coefficient. Expected: 0.0 ~ 1.0'
 
+function! s:use_gui_colors()
+  return has('gui_running') || has('termguicolors') && &termguicolors || has('nvim') && $NVIM_TUI_ENABLE_TRUE_COLOR
+endfunction
+
 function! s:unsupported()
-  let var = 'g:limelight_conceal_'.(has('gui_running') ? 'gui' : 'cterm').'fg'
+  let var = 'g:limelight_conceal_'.(s:use_gui_colors()? ? 'gui' : 'cterm').'fg'
 
   if exists(var)
     return 'Cannot calculate background color.'
@@ -139,7 +143,7 @@ function! s:dim(coeff)
   let fg = synIDattr(synid, 'fg#')
   let bg = synIDattr(synid, 'bg#')
 
-  if has('gui_running') || has('termguicolors') && &termguicolors || has('nvim') && $NVIM_TUI_ENABLE_TRUE_COLOR
+  if s:use_gui_colors()
     if a:coeff < 0 && exists('g:limelight_conceal_guifg')
       let dim = g:limelight_conceal_guifg
     elseif empty(fg) || empty(bg)
