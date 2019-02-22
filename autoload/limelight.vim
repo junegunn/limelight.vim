@@ -46,15 +46,15 @@ function! s:getpos()
   let bop = get(g:, 'limelight_bop', '^\s*$\n\zs')
   let eop = get(g:, 'limelight_eop', '^\s*$')
   let span = max([0, get(g:, 'limelight_paragraph_span', 0) - s:empty(getline('.'))])
-  let pos = exists('*getcurpos')? getcurpos() : getpos('.')
+  let win_view = winsaveview()
   for i in range(0, span)
     let start = searchpos(bop, i == 0 ? 'cbW' : 'bW')[0]
   endfor
-  call setpos('.', pos)
+  call winrestview(win_view)
   for _ in range(0, span)
     let end = searchpos(eop, 'W')[0]
   endfor
-  call setpos('.', pos)
+  call winrestview(win_view)
   return [start, end]
 endfunction
 
