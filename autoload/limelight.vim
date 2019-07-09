@@ -46,7 +46,7 @@ function! s:getpos()
   let bop = get(g:, 'limelight_bop', '^\s*$\n\zs')
   let eop = get(g:, 'limelight_eop', '^\s*$')
   let span = max([0, get(g:, 'limelight_paragraph_span', 0) - s:empty(getline('.'))])
-  let pos = getpos('.')
+  let pos = exists('*getcurpos')? getcurpos() : getpos('.')
   for i in range(0, span)
     let start = searchpos(bop, i == 0 ? 'cbW' : 'bW')[0]
   endfor
