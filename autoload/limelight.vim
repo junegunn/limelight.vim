@@ -254,8 +254,8 @@ function! s:cleanup()
   end
 endfunction
 
-function! limelight#execute(bang, visual, ...) range
-  let range = a:visual ? [a:firstline, a:lastline] : []
+function! limelight#execute(bang, visual, line1, line2, ...)
+  let range = a:visual ? [a:line1, a:line2] : []
   if a:bang
     if a:0 > 0 && a:1 =~ '^!' && !s:is_on()
       if len(a:1) > 1
