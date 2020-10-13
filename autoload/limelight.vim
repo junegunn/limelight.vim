@@ -274,7 +274,7 @@ function! limelight#execute(bang, visual, line1, line2, ...)
 endfunction
 
 function! limelight#operator(...)
-  '[,']call limelight#execute(0, 1)
+  call limelight#execute(0, 1, line("'["), line("']"))
 endfunction
 
 let &cpo = s:cpo_save
