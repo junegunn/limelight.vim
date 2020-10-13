@@ -98,7 +98,9 @@ Execute (Unsupported. but g:limelight_conceal_???fg defined):
     Limelight!
     AssertOff
   else
-    set notermguicolors
+    if exists('&termguicolors')
+      set notermguicolors
+    endif
     colo default
     let &t_Co = 256
 
@@ -134,4 +136,4 @@ Execute (Cleanup):
   delc AssertOff
   unlet! msg
   Restore
-  execute 'colo '.g:colors_name
+  silent! execute 'colo '.g:colors_name
