@@ -98,6 +98,7 @@ Execute (Unsupported. but g:limelight_conceal_???fg defined):
     Limelight!
     AssertOff
   else
+    set notermguicolors
     colo default
     let &t_Co = 256
 
