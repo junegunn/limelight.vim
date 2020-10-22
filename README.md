@@ -6,7 +6,7 @@ Hyperfocus-writing in Vim.
 ![](https://raw.github.com/junegunn/i/master/limelight.gif)
 
 Best served with [Goyo.vim](https://github.com/junegunn/goyo.vim).
-Works on 256-color terminal or on GVim.
+Works on the 256-color terminal or on GVim.
 
 Usage
 -----
@@ -21,7 +21,7 @@ Usage
 ### Limelight for a selected range
 
 You can invoke `:Limelight` for a visual range. There are also `<Plug>`
-mappings for normal and visual mode for the purpose.
+mappings for a normal and visual mode for the purpose.
 
 ```vim
 nmap <Leader>l <Plug>(Limelight)
