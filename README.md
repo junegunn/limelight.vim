@@ -55,6 +55,11 @@ let g:limelight_paragraph_span = 1
 let g:limelight_bop = '^\s'
 let g:limelight_eop = '\ze\n^\s'
 
+" Alternatively, you can use movements to define paragraphs
+let g:limelight_mode = 'movement'
+let g:limelight_bop = '{'
+let g:limelight_eop = '}'
+
 " Highlighting priority (default: 10)
 "   Set it to -1 not to overrule hlsearch
 let g:limelight_priority = -1
