@@ -54,6 +54,9 @@ let g:limelight_paragraph_span = 1
 "   and each paragraph starts with indentation
 let g:limelight_bop = '^\s'
 let g:limelight_eop = '\ze\n^\s'
+"   These can also be set buffer-local (via filetype plugins)
+let b:limelight_bop = '^\s*function'
+let b:limelight_eop = '^\s*endfunction'
 
 " Highlighting priority (default: 10)
 "   Set it to -1 not to overrule hlsearch
