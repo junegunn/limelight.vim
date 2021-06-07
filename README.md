@@ -31,17 +31,25 @@ xmap <Leader>l <Plug>(Limelight)
 ### Options
 
 For some color schemes, Limelight may not be able to calculate the color for
-dimming down the surrounding paragraphs. In that case, you need to define
-`g:limelight_conceal_ctermfg` or `g:limelight_conceal_guifg`.
+dimming down the surrounding paragraphs. In that case, you need to define it manually
+in your .vimrc file. you can do so by adding `g:limelight_conceal_ctermfg=` or `g:limelight_conceal_guifg=` 
+followed by the clor of your choosing. (To see the available color for each you can type ":help cterm-colors" or ":help gui-colors".)
+
+Here's some line examples of what it should look like, but feel free to change the color name to suite your needs.
 
 ```vim
 " Color name (:help cterm-colors) or ANSI code
 let g:limelight_conceal_ctermfg = 'gray'
+" Or
 let g:limelight_conceal_ctermfg = 240
+
 
 " Color name (:help gui-colors) or RGB color
 let g:limelight_conceal_guifg = 'DarkGray'
+" Or
 let g:limelight_conceal_guifg = '#777777'
+
+"Some other example of line you might whant to try --->
 
 " Default: 0.5
 let g:limelight_default_coefficient = 0.7
