@@ -33,7 +33,7 @@ xmap <Leader>l <Plug>(Limelight)
 For some color schemes, Limelight may not be able to calculate the color for
 dimming down the surrounding paragraphs. In that case, you need to define it manually
 in your .vimrc file. you can do so by adding `g:limelight_conceal_ctermfg=` or `g:limelight_conceal_guifg=` 
-followed by the clor of your choosing. (To see the available color for each you can type ":help cterm-colors" or ":help gui-colors".)
+followed by the color of your choosing. (To see the available color for each you can type ":help cterm-colors" or ":help gui-colors".)
 
 Here's some line examples of what it should look like, but feel free to change the color name to suite your needs.
 
