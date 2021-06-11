@@ -137,8 +137,12 @@ endfunction
 function! s:dim(coeff)
   let synid = synIDtrans(hlID('Normal'))
   let fg = synIDattr(synid, 'fg#')
-  let bg = synIDattr(synid, 'bg#')
-
+  if synIDattr(synid, 'bg#') == 'none'
+    let bg = 0
+  else
+    let bg = synIDattr(synid, 'bg#')
+  endif
+  
   if has('gui_running') || has('termguicolors') && &termguicolors || has('nvim') && $NVIM_TUI_ENABLE_TRUE_COLOR
     if a:coeff < 0 && exists('g:limelight_conceal_guifg')
       let dim = g:limelight_conceal_guifg
