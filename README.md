@@ -18,6 +18,14 @@ Usage
 - `Limelight!! [0.0 ~ 1.0]`
     - Toggle Limelight
 
+### Installation
+Use your favorite plugin manager:
+- [vim-plug](https://github.com/junegunn/vim-plug)
+    1. Add `Plug 'junegunn/limelight.vim'` to your `$MYVIMRC`
+    2. Run `:source $MYVIMRC`
+    3. Run `:PlugInstall`
+
+
 ### Limelight for a selected range
 
 You can invoke `:Limelight` for a visual range. There are also `<Plug>`
