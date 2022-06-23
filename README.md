@@ -21,8 +21,8 @@ Usage
 ### Installation
 Use your favorite plugin manager:
 - [vim-plug](https://github.com/junegunn/vim-plug)
-    1. Add `Plug 'junegunn/limelight.vim'` to your `$MYVIMRC`
-    2. Run `:source $MYVIMRC`
+    1. Add `Plug 'junegunn/limelight.vim'` to your vimrc
+    2. Run `:source %`
     3. Run `:PlugInstall`
 
 
