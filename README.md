@@ -8,7 +8,6 @@ Hyperfocus-writing in Vim.
 Best served with [Goyo.vim](https://github.com/junegunn/goyo.vim).
 Works on 256-color terminal or on GVim.
 
-
 Installation
 ------------
 
