@@ -21,9 +21,6 @@ jobs:
 
       - name: Test
         run: |
-          git config --global user.email "you@example.com"
-          git config --global user.name "Your Name"
-
           git clone https://github.com/junegunn/vader.vim.git
           git clone https://github.com/junegunn/seoul256.vim.git
           vim -Nu <(cat << VIMRC
