@@ -29,8 +29,6 @@ Usage
 - `Limelight!! [0.0 ~ 1.0]`
     - Toggle Limelight
 
-
-
 ### Limelight for a selected range
 
 You can invoke `:Limelight` for a visual range. There are also `<Plug>`
