@@ -25,7 +25,9 @@ jobs:
           git config --global user.name "Your Name"
 
           git clone https://github.com/junegunn/vader.vim.git
+          git clone https://github.com/junegunn/seoul256.vim.git
           vim -Nu <(cat << VIMRC
           set rtp+=vader.vim
+          set rtp+=seoul256.vim
           set rtp+=.
           VIMRC) -c 'silent Vader! test/*' > /dev/null
