@@ -1,5 +1,6 @@
-limelight.vim ![travis-ci](https://travis-ci.org/junegunn/limelight.vim.svg?branch=master)
+limelight.vim ![GitHub Actions](https://img.shields.io/github/actions/workflow/status/junegunn/limelight.vim/test.yml?branch=master)
 =============
+
 
 Hyperfocus-writing in Vim.
 
