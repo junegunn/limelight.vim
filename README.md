@@ -9,7 +9,9 @@ Best served with [Goyo.vim](https://github.com/junegunn/goyo.vim).
 Works on 256-color terminal or on GVim.
 
 
-### Installation
+Installation
+-----
+
 Use your favorite plugin manager:
 - [vim-plug](https://github.com/junegunn/vim-plug)
     1. Add `Plug 'junegunn/limelight.vim'` to your vimrc
