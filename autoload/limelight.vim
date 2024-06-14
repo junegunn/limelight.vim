@@ -42,19 +42,28 @@ function! s:unsupported()
   endif
 endfunction
 
+function! s:searchline(arg, flags)
+  if get(g:, 'limelight_mode', 'pattern') == 'movement'
+    execute 'silent! normal! ' . a:arg
+    return line('.')
+  else
+    return searchpos(a:arg, a:flags)[0]
+  endif
+endfunction
+
 function! s:getpos()
   let bop = get(g:, 'limelight_bop', '^\s*$\n\zs')
   let eop = get(g:, 'limelight_eop', '^\s*$')
   let span = max([0, get(g:, 'limelight_paragraph_span', 0) - s:empty(getline('.'))])
-  let pos = exists('*getcurpos')? getcurpos() : getpos('.')
+  let win_view = winsaveview()
   for i in range(0, span)
-    let start = searchpos(bop, i == 0 ? 'cbW' : 'bW')[0]
+    let start = s:searchline(bop, i == 0 ? 'cbW' : 'bW')
   endfor
-  call setpos('.', pos)
+  call winrestview(win_view)
   for _ in range(0, span)
-    let end = searchpos(eop, 'W')[0]
+    let end = s:searchline(eop, 'W')
   endfor
-  call setpos('.', pos)
+  call winrestview(win_view)
   return [start, end]
 endfunction
 
