@@ -51,8 +51,9 @@ function! s:getpos()
     let start = searchpos(bop, i == 0 ? 'cbW' : 'bW')[0]
   endfor
   call setpos('.', pos)
+  normal 0
   for _ in range(0, span)
-    let end = searchpos(eop, 'W')[0]
+    let end = searchpos(eop, 'Wc')[0]
   endfor
   call setpos('.', pos)
   return [start, end]
