@@ -1,0 +1,123 @@
+limelight-vim.txt	limelight-vim	Last change: September 12 2024
+LIMELIGHT-VIM - TABLE OF CONTENTS              *limelight-vim* *limelight-vim-toc*
+==============================================================================
+
+  limelight.vim                       |limelight-vim|
+    Installation                      |limelight-vim-installation|
+    Usage                             |limelight-vim-usage|
+      Limelight for a selected range  |limelight-vim-limelight-for-a-selected-range|
+      Options                         |limelight-vim-options|
+    Goyo.vim integration              |limelight-vim-goyo-vim-integration|
+    Acknowledgement                   |limelight-vim-acknowledgement|
+    License                           |limelight-vim-license|
+
+LIMELIGHT.VIM
+==============================================================================
+
+Hyperfocus-writing in Vim.
+
+Best served with {Goyo.vim}{1}. Works on 256-color terminal or on GVim.
+
+                                      {1} https://github.com/junegunn/goyo.vim
+
+
+INSTALLATION                                        *limelight-vim-installation*
+==============================================================================
+
+Use your favorite plugin manager.
+
+                                                                  *:PlugInstall*
+
+ - {vim-plug}{2}
+   1. Add `Plug 'junegunn/limelight.vim'` to your Vim configuration file
+   2. Run `:source %`
+   3. Run `:PlugInstall`
+
+                                      {2} https://github.com/junegunn/vim-plug
+
+
+USAGE                                                      *limelight-vim-usage*
+==============================================================================
+
+ - `Limelight [0.0 ~ 1.0]`
+   - Turn Limelight on
+ - `Limelight!`
+   - Turn Limelight off
+ - `Limelight!! [0.0 ~ 1.0]`
+   - Toggle Limelight
+
+
+< Limelight for a selected range >____________________________________________~
+                                  *limelight-vim-limelight-for-a-selected-range*
+
+                                                                    *:Limelight*
+
+You can invoke `:Limelight` for a visual range. There are also <Plug> mappings
+for normal and visual mode for the purpose.
+
+                                                             *<Plug>(Limelight)*
+>
+    nmap <Leader>l <Plug>(Limelight)
+    xmap <Leader>l <Plug>(Limelight)
+<
+
+< Options >___________________________________________________________________~
+                                                         *limelight-vim-options*
+
+                         *g:limelight_conceal_ctermfg* *g:limelight_conceal_guifg*
+
+For some color schemes, Limelight may not be able to calculate the color for
+dimming down the surrounding paragraphs. In that case, you need to define
+`g:limelight_conceal_ctermfg` or `g:limelight_conceal_guifg`.
+
+                          *g:limelight_priority* *g:limelight_eop* *g:limelight_bop*
+                    *g:limelight_paragraph_span* *g:limelight_default_coefficient*
+>
+    " Color name (:help cterm-colors) or ANSI code
+    let g:limelight_conceal_ctermfg = 'gray'
+    let g:limelight_conceal_ctermfg = 240
+
+    " Color name (:help gui-colors) or RGB color
+    let g:limelight_conceal_guifg = 'DarkGray'
+    let g:limelight_conceal_guifg = '#777777'
+
+    " Default: 0.5
+    let g:limelight_default_coefficient = 0.7
+
+    " Number of preceding/following paragraphs to include (default: 0)
+    let g:limelight_paragraph_span = 1
+
+    " Beginning/end of paragraph
+    "   When there's no empty line between the paragraphs
+    "   and each paragraph starts with indentation
+    let g:limelight_bop = '^\s'
+    let g:limelight_eop = '\ze\n^\s'
+
+    " Highlighting priority (default: 10)
+    "   Set it to -1 not to overrule hlsearch
+    let g:limelight_priority = -1
+<
+
+GOYO.VIM INTEGRATION                        *limelight-vim-goyo-vim-integration*
+==============================================================================
+>
+    autocmd! User GoyoEnter Limelight
+    autocmd! User GoyoLeave Limelight!
+<
+
+ACKNOWLEDGEMENT                                  *limelight-vim-acknowledgement*
+==============================================================================
+
+Thanks to {@Cutuchiqueno}{3} for {suggesting the idea}{4}.
+
+                            {3} https://github.com/Cutuchiqueno
+                            {4} https://github.com/junegunn/goyo.vim/issues/34
+
+
+LICENSE                                                  *limelight-vim-license*
+==============================================================================
+
+MIT
+
+==============================================================================
+vim:tw=78:sw=2:ts=2:ft=help:norl:nowrap:
