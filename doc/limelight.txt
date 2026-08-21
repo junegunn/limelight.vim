@@ -72,6 +72,7 @@ dimming down the surrounding paragraphs. In that case, you need to define
 
                           *g:limelight_priority* *g:limelight_eop* *g:limelight_bop*
                     *g:limelight_paragraph_span* *g:limelight_default_coefficient*
+                                                       *g:limelight_skip_blank*
 >
     " Color name (:help cterm-colors) or ANSI code
     let g:limelight_conceal_ctermfg = 'gray'
@@ -86,6 +87,9 @@ dimming down the surrounding paragraphs. In that case, you need to define
 
     " Number of preceding/following paragraphs to include (default: 0)
     let g:limelight_paragraph_span = 1
+
+    " Skip highlighting preceding/following paragraphs on blank lines (default: 0)
+	let g:limelight_skip_blank = 1
 
     " Beginning/end of paragraph
     "   When there's no empty line between the paragraphs

@@ -43,6 +43,9 @@ function! s:unsupported()
 endfunction
 
 function! s:getpos()
+  if get(g:, 'limelight_skip_blank', 0) && s:empty(getline('.'))
+    return [line('.'), line('.')]
+  endif
   let bop = get(g:, 'limelight_bop', '^\s*$\n\zs')
   let eop = get(g:, 'limelight_eop', '^\s*$')
   let span = max([0, get(g:, 'limelight_paragraph_span', 0) - s:empty(getline('.'))])

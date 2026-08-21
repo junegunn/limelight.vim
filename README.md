@@ -60,6 +60,9 @@ let g:limelight_default_coefficient = 0.7
 " Number of preceding/following paragraphs to include (default: 0)
 let g:limelight_paragraph_span = 1
 
+" Skip highlighting preceding/following paragraphs on blank lines (default: 0)
+let g:limelight_skip_blank = 1
+
 " Beginning/end of paragraph
 "   When there's no empty line between the paragraphs
 "   and each paragraph starts with indentation
